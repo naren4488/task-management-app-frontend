@@ -15,20 +15,50 @@ import {
 import { createPortal } from "react-dom";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import TaskCard from "@/components/TaskCard";
+import backendEndpoint from "@/config/config";
+import { toast } from "sonner";
 
 const TasksPage = () => {
   const [columns, setColumns] = useState<TypeColumn[]>([]);
   const [tasks, setTasks] = useState<TypeTask[]>([]);
   const [activeTask, setActiveTask] = useState<TypeTask | null>(null);
   const [activeColumn, setActiveColumn] = useState<TypeColumn | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const columnIds = useMemo(() => {
     return columns.map((col) => col.id);
   }, [columns]);
 
+  const getTasks = async () => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      setIsLoading(true);
+      try {
+        const res = await fetch(`${backendEndpoint}/tasks`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await res.json();
+        if (res.status === 401) {
+          toast.error(data.message);
+        } else if (res.status !== 200) {
+          toast.info("Something went wrong, Please check the logs");
+        }
+        console.log("tasks", data.tasks);
+        setTasks(tasks);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
   useEffect(() => {
     setColumns(testingData.columns);
-    setTasks(testingData.tasks);
+    getTasks();
+    // setTasks(testingData.tasks);
   }, []);
 
   const addNewTask = (
@@ -164,6 +194,10 @@ const TasksPage = () => {
       },
     })
   );
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <DndContext

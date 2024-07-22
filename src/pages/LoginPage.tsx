@@ -56,6 +56,7 @@ const LoginPage = () => {
           toast.error("User does not exist with this mail");
         } else if (res.status === 200) {
           toast.success("Successfully Logged In");
+          localStorage.setItem("accessToken", data.token);
           navigate("/tasks");
         } else {
           toast.info("Something went wrong, Please check the logs");
