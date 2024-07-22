@@ -4,7 +4,6 @@ import { TypeColumn } from "@/types";
 import TaskColumn from "@/components/TaskColumn";
 const TasksPage = () => {
   const [columns, setColumns] = useState<TypeColumn[]>([]);
-
   useEffect(() => {
     setColumns(testingData.columns);
   }, []);
