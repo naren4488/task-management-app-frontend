@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import backendEndpoint from "@/config/config";
+import { toast } from "sonner";
 
 interface FormState {
   firstName: string;
@@ -19,7 +21,7 @@ const RegisterPage = () => {
     password: "",
     confirmPassword: "",
   });
-
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Partial<FormState>>({});
   const navigate = useNavigate();
 
@@ -48,13 +50,31 @@ const RegisterPage = () => {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
+      setLoading(true);
       try {
         // register user api call here
+        const res = await fetch(`${backendEndpoint}/user/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+        const data = await res.json();
 
-        console.log("Signup successful!");
-        navigate("/login");
+        if (res.status === 400) {
+          toast.error(data.message);
+        } else if (res.status === 201) {
+          toast.success("Successfully registered");
+          navigate("/login");
+        } else {
+          toast.info("Something went wrong, Please check the logs");
+          console.log(data);
+        }
       } catch (error) {
-        alert("Signup failed!");
+        alert(error);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -162,6 +182,7 @@ const RegisterPage = () => {
           </div>
           <Button
             type="submit"
+            disabled={loading}
             className="w-full p-2 text-black  bg-amber-400 rounded hover:bg-amber-500"
           >
             Signup
