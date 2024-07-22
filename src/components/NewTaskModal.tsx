@@ -12,11 +12,12 @@ import { Input } from "./ui/input";
 import { useState } from "react";
 
 interface Props {
-  addNewTask: (taskTitle: string, taskDesc: string) => void;
+  addNewTask: (taskTitle: string, taskDesc: string, taskStatus: string) => void;
   tasksCount: number;
+  status: string;
 }
 
-const NewTaskModal = ({ addNewTask, tasksCount }: Props) => {
+const NewTaskModal = ({ addNewTask, tasksCount, status }: Props) => {
   const [title, setTitle] = useState<string>("");
   const [desc, setDesc] = useState<string>("");
 
@@ -29,14 +30,14 @@ const NewTaskModal = ({ addNewTask, tasksCount }: Props) => {
 
   const handleSubmit = () => {
     if (title && desc) {
-      addNewTask(title, desc);
+      addNewTask(title, desc, status);
       setTitle("");
       setDesc("");
     } else {
       // in case of user does not enter task details - default values
       const title = `Task ${tasksCount + 1}`;
       const desc = `Description ${tasksCount + 1}`;
-      addNewTask(title, desc);
+      addNewTask(title, desc, status);
     }
   };
 
