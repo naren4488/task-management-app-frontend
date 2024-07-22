@@ -3,6 +3,8 @@ import UserProfilePage from "./pages/UserProfilePage";
 import Layout from "./layouts/layout";
 import HomePage from "./pages/HomePage";
 import TasksPage from "./pages/TasksPage";
+import RegisterPage from "./pages/RegisterPage";
+import LoginPage from "./pages/LoginPage";
 
 const AppRoutes = () => {
   return (
@@ -28,6 +30,22 @@ const AppRoutes = () => {
         element={
           <Layout>
             <TasksPage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <Layout>
+            <RegisterPage />
+          </Layout>
+        }
+      />
+      <Route
+        path="/login"
+        element={
+          <Layout>
+            <LoginPage />
           </Layout>
         }
       />
