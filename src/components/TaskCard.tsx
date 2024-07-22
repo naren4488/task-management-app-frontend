@@ -1,11 +1,19 @@
 import { TypeTask } from "@/types";
 import { Button } from "./ui/button";
 import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Dialog, DialogTrigger } from "./ui/dialog";
+import EditTaskModal from "./EditTaskModal";
 
 interface Props {
   task: TypeTask;
+  editTask: (
+    taskId: number,
+    taskTitle: string,
+    taskDesc: string,
+    status: string
+  ) => void;
 }
-const TaskCard = ({ task }: Props) => {
+const TaskCard = ({ task, editTask }: Props) => {
   return (
     <div className="p-2 rounded-md bg-amber-100 border-2 border-transparent hover:border-2 hover:border-amber-300 box-border min-h-36 h-36 cursor-grab flex flex-col justify-between">
       <div>
@@ -18,9 +26,14 @@ const TaskCard = ({ task }: Props) => {
           <Button className="bg-red-500 hover:bg-red-600 h-fit ">
             <Trash2 className="size-4" />
           </Button>
-          <Button className="bg-amber-500 hover:bg-amber-600 h-fit">
-            <Pencil className="size-4" />
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild className="pt-2 hover:cursor-pointer">
+              <div className="bg-amber-500 hover:bg-amber-600 h-fit">
+                <Pencil className="size-4" />
+              </div>
+            </DialogTrigger>
+            <EditTaskModal editTask={editTask} task={task} />
+          </Dialog>
           <Button className="bg-blue-500 hover:bg-blue-600 h-fit">
             <Eye className="size-4" />
           </Button>

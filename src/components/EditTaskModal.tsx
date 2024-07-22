@@ -10,15 +10,29 @@ import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { useState } from "react";
+import { TypeTask } from "@/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 interface Props {
-  addNewTask: (taskTitle: string, taskDesc: string) => void;
-  tasksCount: number;
+  editTask: (
+    taskId: number,
+    taskTitle: string,
+    taskDesc: string,
+    status: string
+  ) => void;
+  task: TypeTask;
 }
 
-const NewTaskModal = ({ addNewTask, tasksCount }: Props) => {
-  const [title, setTitle] = useState<string>("");
-  const [desc, setDesc] = useState<string>("");
+const EditTaskModal = ({ editTask, task }: Props) => {
+  const [title, setTitle] = useState<string>(task.title);
+  const [desc, setDesc] = useState<string>(task.description);
+  const [status, setStatus] = useState<string>(task.status);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -26,26 +40,20 @@ const NewTaskModal = ({ addNewTask, tasksCount }: Props) => {
   const handleDescChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDesc(e.target.value);
   };
+  const handleStatusChange = (e: string) => {
+    setStatus(e);
+  };
 
-  const handleSubmit = () => {
-    if (title && desc) {
-      addNewTask(title, desc);
-      setTitle("");
-      setDesc("");
-    } else {
-      // in case of user does not enter task details - default values
-      const title = `Task ${tasksCount + 1}`;
-      const desc = `Description ${tasksCount + 1}`;
-      addNewTask(title, desc);
-    }
+  const handleUpdate = () => {
+    editTask(task.id, title, desc, status);
   };
 
   return (
     <DialogContent className="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>Add New Task</DialogTitle>
+        <DialogTitle>Edit Task</DialogTitle>
         <DialogDescription>
-          Please enter the details to create a new task
+          Please update the details to edit the task
         </DialogDescription>
       </DialogHeader>
       <div className="grid gap-4 py-4">
@@ -55,7 +63,6 @@ const NewTaskModal = ({ addNewTask, tasksCount }: Props) => {
           </Label>
           <Input
             id="title"
-            placeholder="Enter task title here..."
             value={title}
             className="col-span-3"
             onChange={(e) => handleTitleChange(e)}
@@ -67,11 +74,25 @@ const NewTaskModal = ({ addNewTask, tasksCount }: Props) => {
           </Label>
           <Input
             id="description"
-            placeholder="Enter task description here..."
             value={desc}
             className="col-span-3"
             onChange={(e) => handleDescChange(e)}
           />
+        </div>
+        <div className="grid grid-cols-4 items-center gap-4">
+          <Label htmlFor="status" className="text-right">
+            Status
+          </Label>
+          <Select value={status} onValueChange={(e) => handleStatusChange(e)}>
+            <SelectTrigger className=" col-span-3">
+              <SelectValue placeholder={status} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="To Do">To Do</SelectItem>
+              <SelectItem value="In Progress">In Progress</SelectItem>
+              <SelectItem value="Done">Done</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
       <DialogFooter className="flex flex-col gap-2 ">
@@ -79,9 +100,9 @@ const NewTaskModal = ({ addNewTask, tasksCount }: Props) => {
           <Button
             type="submit"
             className="bg-amber-400 hover:bg-amber-500 text-black"
-            onClick={handleSubmit}
+            onClick={handleUpdate}
           >
-            Add Task
+            Save Changes
           </Button>
         </DialogClose>
         <DialogClose asChild>
@@ -98,4 +119,4 @@ const NewTaskModal = ({ addNewTask, tasksCount }: Props) => {
   );
 };
 
-export default NewTaskModal;
+export default EditTaskModal;
