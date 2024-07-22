@@ -4,6 +4,8 @@ import { Eye, Pencil, Trash2 } from "lucide-react";
 import { Dialog, DialogTrigger } from "./ui/dialog";
 import EditTaskModal from "./EditTaskModal";
 import ViewTaskModal from "./ViewTaskModal";
+// import { useSortable } from "@dnd-kit/sortable";
+// import { CSS } from "@dnd-kit/utilities";
 
 interface Props {
   task: TypeTask;
@@ -16,8 +18,27 @@ interface Props {
   deleteTask: (taskId: number) => void;
 }
 const TaskCard = ({ task, editTask, deleteTask }: Props) => {
+  // const { setNodeRef, attributes, listeners, transform, transition } =
+  //   useSortable({
+  //     id: task.id,
+  //     data: {
+  //       type: "Task",
+  //       task,
+  //     },
+  //   });
+
+  // const style = {
+  //   transition,
+  //   transform: CSS.Transform.toString(transform),
+  // };
   return (
-    <div className="p-2 rounded-md bg-amber-100 border-2 border-transparent hover:border-2 hover:border-amber-300 box-border min-h-36 h-36 cursor-grab flex flex-col justify-between">
+    <div
+      // ref={setNodeRef}
+      // style={style}
+      // {...attributes}
+      // {...listeners}
+      className="p-2 rounded-md bg-amber-100 border-2 border-transparent hover:border-2 hover:border-amber-300 box-border min-h-36 h-36 cursor-grab flex flex-col justify-between"
+    >
       <div>
         <p className="font-bold">{task.title}</p>
         <p className="  text-sm truncate">{task.description}</p>
