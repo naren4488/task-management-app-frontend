@@ -1,0 +1,39 @@
+{
+  "columns": [
+    { "id": 1, "title": "To Do" },
+    { "id": 2, "title": "In Progress" },
+    { "id": 3, "title": "Done" }
+  ],
+  "tasks": [
+    {
+      "id": 1,
+      "title": "wash clotes",
+      "description": "wash clothes including white shirt",
+      "status": "To Do"
+    },
+    {
+      "id": 2,
+      "title": "drink juice",
+      "description": "drink mango juice from corner shop",
+      "status": "In Progress"
+    },
+    {
+      "id": 3,
+      "title": "watch movie",
+      "description": "watch schindler's list movie on TV",
+      "status": "To Do"
+    },
+    {
+      "id": 4,
+      "title": "code the app",
+      "description": "make the task management application for voosh",
+      "status": "In Progress"
+    },
+    {
+      "id": 5,
+      "title": "listen music",
+      "description": "listen latest songs from youtube",
+      "status": "Done"
+    }
+  ]
+}

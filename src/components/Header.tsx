@@ -27,7 +27,7 @@ const Header = () => {
             <Button variant={"outline"}>Sign Up</Button>
             <Button
               onClick={() => setIsAuthenticated(true)}
-              className=" bg-blue-600 hover:bg-blue-700"
+              className=" bg-amber-400 hover:bg-amber-500 text-black px-5"
             >
               Login
             </Button>
