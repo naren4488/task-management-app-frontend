@@ -14,7 +14,7 @@
     {
       "id": 2,
       "title": "drink juice",
-      "description": "drink mango juice from corner shop",
+      "description": "drink mango juice from corner shop testing the large description and how it will appear let us test on screen still need a few more words to get it out of box",
       "status": "In Progress"
     },
     {
@@ -34,6 +34,18 @@
       "title": "listen music",
       "description": "listen latest songs from youtube",
       "status": "Done"
+    },
+    {
+      "id": 6,
+      "title": "walk",
+      "description": "walk for 2 km",
+      "status": "To Do"
+    },
+    {
+      "id": 7,
+      "title": "dance",
+      "description": "go to dance class with my darling",
+      "status": "To Do"
     }
   ]
 }

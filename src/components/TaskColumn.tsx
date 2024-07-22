@@ -27,7 +27,7 @@ const TaskColumn = ({ column }: Props) => {
   return (
     <div className="border shadow-md  p-1 rounded-md h-[520px] flex flex-col justify-between ">
       <p className="font-semibold text-lg bg-amber-300 p-2 ">{column.title}</p>
-      <div className="flex flex-col gap-2 py-2 px-1 flex-grow">
+      <div className="flex flex-col gap-2 py-2 px-1 flex-grow overflow-scroll ">
         {currentColumnTasks.map((task) => (
           <TaskCard key={task.id} task={task} />
         ))}
