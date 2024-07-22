@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import backendEndpoint from "@/config/config";
 
 interface FormState {
   email: string;
@@ -13,7 +15,7 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-
+  const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<Partial<FormState>>({});
   const navigate = useNavigate();
 
@@ -36,12 +38,33 @@ const LoginPage = () => {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
+      setLoading(true);
       try {
-        // login user api call here
-        console.log("Login successful!");
-        navigate("/");
+        // register user api call here
+        const res = await fetch(`${backendEndpoint}/user/login`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+        const data = await res.json();
+
+        if (res.status === 404) {
+          toast.error(data.message);
+        } else if (res.status === 400) {
+          toast.error("User does not exist with this mail");
+        } else if (res.status === 200) {
+          toast.success("Successfully Logged In");
+          navigate("/tasks");
+        } else {
+          toast.info("Something went wrong, Please check the logs");
+          console.log(data);
+        }
       } catch (error) {
-        alert("Login failed!");
+        alert(error);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -84,6 +107,7 @@ const LoginPage = () => {
           </div>
           <Button
             type="submit"
+            disabled={loading}
             className="w-full p-2 text-black  bg-amber-400 rounded hover:bg-amber-500"
           >
             Login
