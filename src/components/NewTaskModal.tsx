@@ -74,7 +74,7 @@ const NewTaskModal = ({ addNewTask, tasksCount }: Props) => {
           />
         </div>
       </div>
-      <DialogFooter className="flex flex-col gap-2 ">
+      <DialogFooter className="flex flex-row justify-end mt-20 gap-2 ">
         <DialogClose asChild className="">
           <Button
             type="submit"

@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 import { Dialog, DialogTrigger } from "./ui/dialog";
 import EditTaskModal from "./EditTaskModal";
+import ViewTaskModal from "./ViewTaskModal";
 
 interface Props {
   task: TypeTask;
@@ -32,15 +33,20 @@ const TaskCard = ({ task, editTask, deleteTask }: Props) => {
           </Button>
           <Dialog>
             <DialogTrigger asChild className="hover:cursor-pointer">
-              <div className="bg-amber-500 hover:bg-amber-600 h-fit p-2 rounded-md">
-                <Pencil className="size-4" />
+              <div className="bg-amber-500 hover:bg-amber-600 h-fit p-2 px-4 rounded-md">
+                <Pencil className="size-4 text-white" />
               </div>
             </DialogTrigger>
             <EditTaskModal editTask={editTask} task={task} />
           </Dialog>
-          <Button className="bg-blue-500 hover:bg-blue-600 h-fit">
-            <Eye className="size-4" />
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild className="hover:cursor-pointer">
+              <div className="bg-blue-500 hover:bg-blue-600 h-fit p-2 px-4 rounded-md">
+                <Eye className="size-4 text-white" />
+              </div>
+            </DialogTrigger>
+            <ViewTaskModal task={task} />
+          </Dialog>
         </div>
       </div>
     </div>
