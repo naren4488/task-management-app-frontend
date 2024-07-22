@@ -12,8 +12,9 @@ interface Props {
     taskDesc: string,
     status: string
   ) => void;
+  deleteTask: (taskId: number) => void;
 }
-const TaskCard = ({ task, editTask }: Props) => {
+const TaskCard = ({ task, editTask, deleteTask }: Props) => {
   return (
     <div className="p-2 rounded-md bg-amber-100 border-2 border-transparent hover:border-2 hover:border-amber-300 box-border min-h-36 h-36 cursor-grab flex flex-col justify-between">
       <div>
@@ -23,12 +24,15 @@ const TaskCard = ({ task, editTask }: Props) => {
       <div>
         <p className="text-xs mb-1">Created At: 01/06/2024, 06:34:22</p>
         <div className="flex items-center gap-2 justify-end">
-          <Button className="bg-red-500 hover:bg-red-600 h-fit ">
+          <Button
+            onClick={() => deleteTask(task.id)}
+            className="bg-red-500 hover:bg-red-600 h-fit "
+          >
             <Trash2 className="size-4" />
           </Button>
           <Dialog>
-            <DialogTrigger asChild className="pt-2 hover:cursor-pointer">
-              <div className="bg-amber-500 hover:bg-amber-600 h-fit">
+            <DialogTrigger asChild className="hover:cursor-pointer">
+              <div className="bg-amber-500 hover:bg-amber-600 h-fit p-2 rounded-md">
                 <Pencil className="size-4" />
               </div>
             </DialogTrigger>

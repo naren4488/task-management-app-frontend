@@ -55,12 +55,22 @@ const TaskColumn = ({ column, tasks, setTasks }: Props) => {
     setTasks(tempTask);
   };
 
+  const deleteTask = (taskId: number) => {
+    const item = tasks.filter((task) => task.id !== taskId);
+    setTasks(item);
+  };
+
   return (
     <div className="border shadow-md  p-1 rounded-md h-[520px] flex flex-col justify-between ">
       <p className="font-semibold text-lg bg-amber-300 p-2 ">{column.title}</p>
       <div className="flex flex-col gap-2 py-2 px-1 flex-grow overflow-scroll ">
         {currentColumnTasks.map((task) => (
-          <TaskCard key={task.id} task={task} editTask={editTask} />
+          <TaskCard
+            key={task.id}
+            task={task}
+            editTask={editTask}
+            deleteTask={deleteTask}
+          />
         ))}
       </div>
       <Dialog>
