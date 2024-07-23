@@ -10,15 +10,15 @@ import { CSS } from "@dnd-kit/utilities";
 interface Props {
   task: TypeTask;
   editTask: (
-    taskId: number,
+    taskId: string,
     taskTitle: string,
     taskDesc: string,
     status: string
   ) => void;
-  deleteTask: (taskId: number) => void;
+  deleteTask: (taskId: string) => void;
 }
 const TaskCard = ({ task, editTask, deleteTask }: Props) => {
-  console.log("finally at ", task);
+  // console.log("finally at ", task);
   const {
     setNodeRef,
     attributes,
@@ -61,7 +61,7 @@ const TaskCard = ({ task, editTask, deleteTask }: Props) => {
         <p className="text-xs mb-1">Created At: 01/06/2024, 06:34:22</p>
         <div className="flex items-center gap-2 justify-end">
           <Button
-            // onClick={() => deleteTask(task.id)}
+            onClick={() => deleteTask(task._id)}
             className="bg-red-500 hover:bg-red-600 h-fit "
           >
             <Trash2 className="size-4" />

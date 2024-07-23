@@ -68,7 +68,7 @@ const RegisterPage = () => {
           toast.success("Successfully registered");
           navigate("/login");
         } else {
-          toast.info("Something went wrong, Please check the logs");
+          toast.warning("Something went wrong, Please check the logs");
           console.log(data);
         }
       } catch (error) {

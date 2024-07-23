@@ -12,12 +12,12 @@ interface Props {
   tasks: TypeTask[];
   addNewTask: (taskTitle: string, taskDesc: string, taskStatus: string) => void;
   editTask: (
-    taskId: number,
+    taskId: string,
     taskTitle: string,
     taskDesc: string,
     taskStatus: string
   ) => void;
-  deleteTask: (taskId: number) => void;
+  deleteTask: (taskId: string) => void;
 }
 
 const TaskColumn = ({
@@ -29,10 +29,10 @@ const TaskColumn = ({
 }: Props) => {
   const [currentColumnTasks, setCurrnetColumnTasks] = useState<TypeTask[]>([]);
 
-  console.log("tasks reached in task col", tasks);
+  // console.log("tasks reached in task col", tasks);
 
   const tasksId = useMemo(() => {
-    return tasks.map((task) => task.id);
+    return tasks.map((task) => task._id);
   }, [tasks]);
 
   const {

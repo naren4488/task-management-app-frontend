@@ -21,7 +21,7 @@ import {
 
 interface Props {
   editTask: (
-    taskId: number,
+    taskId: string,
     taskTitle: string,
     taskDesc: string,
     status: string
@@ -45,7 +45,7 @@ const EditTaskModal = ({ editTask, task }: Props) => {
   };
 
   const handleUpdate = () => {
-    editTask(task.id, title, desc, status);
+    editTask(task._id, title, desc, status);
   };
 
   return (

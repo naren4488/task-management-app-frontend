@@ -43,9 +43,9 @@ const TasksPage = () => {
         if (res.status === 401) {
           toast.error(data.message);
         } else if (res.status !== 200) {
-          toast.info("Something went wrong, Please check the logs");
+          toast.warning("Something went wrong, Please check the logs");
         }
-        setTasks(tasks);
+        setTasks(data.tasks);
       } catch (err) {
         console.log(err);
       } finally {
@@ -62,7 +62,6 @@ const TasksPage = () => {
     status: string;
   }): Promise<TypeTask | null> => {
     const token = localStorage.getItem("accessToken");
-    console.log("create api call", newTask);
     if (token) {
       // setIsLoading(true);
       try {
@@ -83,7 +82,7 @@ const TasksPage = () => {
           toast.success("Task created");
           return data.newTask;
         } else {
-          toast.info("Something went wrong, Please check the logs");
+          toast.warning("Something went wrong, Please check the logs");
           return null;
         }
       } catch (err) {
@@ -98,54 +97,114 @@ const TasksPage = () => {
     return null;
   };
 
+  const editTaskAPI = async (updatedTask: {
+    id: string;
+    title: string;
+    description: string;
+    status: string;
+  }): Promise<TypeTask | null> => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      // setIsLoading(true);
+      try {
+        const res = await fetch(`${backendEndpoint}/task/${updatedTask.id}`, {
+          method: "PUT",
+          body: JSON.stringify({
+            title: updatedTask.title,
+            description: updatedTask.description,
+            status: updatedTask.status,
+          }),
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+        if (res.status === 200) {
+          toast.success("Task updated");
+          return data.task;
+        } else {
+          toast.warning("Something went wrong, Please check the logs");
+          return null;
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        // setIsLoading(false);
+      }
+    } else {
+      console.log("access token does not exist, please login ");
+      return null;
+    }
+    return null;
+  };
+
+  const deleteTaskAPI = async (taskId: string) => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      // setIsLoading(true);
+      try {
+        const res = await fetch(`${backendEndpoint}/task/${taskId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        await res.json();
+        if (res.status === 200) {
+          toast.warning("Task deleted");
+        } else {
+          toast.warning("Something went wrong, Please check the logs");
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        // setIsLoading(false);
+      }
+    } else {
+      console.log("access token does not exist, please login ");
+    }
+  };
+
   useEffect(() => {
     setColumns(testingData.columns);
     getTasksAPI();
     // setTasks(testingData.tasks);
   }, []);
 
-  const addNewTask = (
+  const addNewTask = async (
     taskTitle: string,
     taskDesc: string,
     taskStatus: string
   ) => {
     const newTask = {
-      // id: Math.floor(Math.random() * 309834),
       title: taskTitle,
       description: taskDesc,
       status: taskStatus,
     };
-    const task = createTaskAPI(newTask);
-    if (task) {
-      task.then((task) => {
-        if (task) {
-          setTasks([...tasks, task]);
-        }
-      });
-    }
+    await createTaskAPI(newTask);
+    await getTasksAPI();
   };
 
-  const editTask = (
-    taskId: number,
+  const editTask = async (
+    taskId: string,
     taskTitle: string,
     taskDesc: string,
     taskStatus: string
   ) => {
-    const updatedTask: TypeTask = {
+    const updatedTask = {
       id: taskId,
       title: taskTitle,
       description: taskDesc,
       status: taskStatus,
     };
-    const tempTask = [...tasks];
-    const updateIndex = tempTask.findIndex((task) => task.id === taskId);
-    tempTask.splice(updateIndex, 1, updatedTask);
-    setTasks(tempTask);
+    await editTaskAPI(updatedTask);
+    await getTasksAPI();
   };
 
-  const deleteTask = (taskId: number) => {
-    const item = tasks.filter((task) => task.id !== taskId);
-    setTasks(item);
+  const deleteTask = async (taskId: string) => {
+    await deleteTaskAPI(taskId);
+    await getTasksAPI();
   };
 
   const onDragStart = (event: DragStartEvent) => {
@@ -215,8 +274,10 @@ const TasksPage = () => {
     // dropping a task over another task
     if (isActiveATask && isOverATask) {
       setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((task) => task.id === activeTaskId);
-        const overIndex = tasks.findIndex((task) => task.id === overTaskId);
+        const activeIndex = tasks.findIndex(
+          (task) => task._id === activeTaskId
+        );
+        const overIndex = tasks.findIndex((task) => task._id === overTaskId);
 
         tasks[activeIndex].status = tasks[overIndex].status;
 
@@ -228,7 +289,9 @@ const TasksPage = () => {
     // dropping a task over a column
     if (isActiveATask && isOverAColumn) {
       setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((task) => task.id === activeTaskId);
+        const activeIndex = tasks.findIndex(
+          (task) => task._id === activeTaskId
+        );
 
         tasks[activeIndex].status = over.data.current?.column.title;
 
@@ -245,9 +308,9 @@ const TasksPage = () => {
     })
   );
 
-  console.log("tasks", tasks);
-  console.log("active task", activeTask);
-  console.log("active col", activeColumn);
+  // console.log("tasks", tasks);
+  // console.log("active task", activeTask);
+  // console.log("active col", activeColumn);
 
   if (isLoading) {
     return <div>Loading...</div>;

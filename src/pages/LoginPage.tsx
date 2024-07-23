@@ -59,7 +59,7 @@ const LoginPage = () => {
           localStorage.setItem("accessToken", data.token);
           navigate("/tasks");
         } else {
-          toast.info("Something went wrong, Please check the logs");
+          toast.warning("Something went wrong, Please check the logs");
           console.log(data);
         }
       } catch (error) {
