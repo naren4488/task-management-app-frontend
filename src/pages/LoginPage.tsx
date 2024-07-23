@@ -57,6 +57,7 @@ const LoginPage = () => {
         } else if (res.status === 200) {
           toast.success("Successfully Logged In");
           localStorage.setItem("accessToken", data.token);
+          localStorage.setItem("userEmail", data.email);
           navigate("/tasks");
         } else {
           toast.warning("Something went wrong, Please check the logs");

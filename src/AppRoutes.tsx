@@ -1,10 +1,11 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import UserProfilePage from "./pages/UserProfilePage";
+// import UserProfilePage from "./pages/UserProfilePage";
 import Layout from "./layouts/layout";
 import HomePage from "./pages/HomePage";
 import TasksPage from "./pages/TasksPage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const AppRoutes = () => {
   return (
@@ -17,22 +18,24 @@ const AppRoutes = () => {
           </Layout>
         }
       />
-      <Route
-        path="/user-profile"
-        element={
-          <Layout>
-            <UserProfilePage />
-          </Layout>
-        }
-      />
-      <Route
-        path="/tasks"
-        element={
-          <Layout>
-            <TasksPage />
-          </Layout>
-        }
-      />
+      <Route element={<ProtectedRoute />}>
+        {/* <Route
+          path="/user-profile"
+          element={
+            <Layout>
+              <UserProfilePage />
+            </Layout>
+          }
+        /> */}
+        <Route
+          path="/tasks"
+          element={
+            <Layout>
+              <TasksPage />
+            </Layout>
+          }
+        />
+      </Route>
       <Route
         path="/register"
         element={

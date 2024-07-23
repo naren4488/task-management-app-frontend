@@ -6,11 +6,18 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [email, setEmail] = useState<string>("test@gmail.com");
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (token) {
       setIsAuthenticated(true);
+      const userEmail = localStorage.getItem("userEmail");
+      if (userEmail) {
+        setEmail(userEmail);
+      } else {
+        setEmail("test@gmail.com");
+      }
     } else {
       setIsAuthenticated(false);
     }
@@ -22,15 +29,15 @@ const Header = () => {
         <img src={BrandLogo} alt="" className="size-10" />
         {isAuthenticated ? (
           <div className="flex gap-3 items-center">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-52">
               <User className="bg-amber-100 rounded-full p-1 size-8" />
-              <p>Narendra Kajla</p>
+              <p className=" truncate">{email}</p>
             </div>
             <Link to={"/"}>
               <Button
                 onClick={() => {
                   localStorage.removeItem("accessToken");
-                  setIsAuthenticated(false);
+                  window.location.reload();
                 }}
                 className=" bg-red-600 hover:bg-red-700"
               >
@@ -41,13 +48,15 @@ const Header = () => {
         ) : (
           <div className="flex gap-3 items-center">
             <Link to={"/register"}>
-              <Button variant={"outline"}>Sign Up</Button>
+              <Button
+                className="border border-amber-300 hover:bg-amber-100"
+                variant={"outline"}
+              >
+                Sign Up
+              </Button>
             </Link>
             <Link to={"/login"}>
-              <Button
-                onClick={() => setIsAuthenticated(true)}
-                className=" bg-amber-400 hover:bg-amber-500 text-black px-5"
-              >
+              <Button className=" bg-amber-400 hover:bg-amber-500 text-black px-5">
                 Login
               </Button>
             </Link>
