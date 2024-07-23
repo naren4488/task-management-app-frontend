@@ -2,25 +2,25 @@ Title : Full-Stack Developer Challenge - Task Manager Application
 
 Task : You are tasked with building a task management application similar to Trello. The application will allow users to create, update, and manage tasks within different columns. Users should be able to move tasks between columns using drag-and-drop functionality. Additionally, users should be able to sign up and log in, including the option to log in via Google.
 
-- Website live link - https://task-management-app-frontend.onrender.com/
-- Backend link (to check backend health) - https://task-management-app-backend-mory.onrender.com/health
+- **Website live link:** [Task Management App](https://task-management-app-frontend.onrender.com/)
+- **Backend health check link:** [Backend Health Check](https://task-management-app-backend-mory.onrender.com/health)
 
-# please note that backend is hosted on render (as it is free) so it may take upto 90 seconds to start, so please use this health checkup link to test the backend running status.
+* Please note that backend is hosted on render (as it is free) so it may take upto 90 seconds to start, so please use this health checkup link to test the backend running status.
 
-- Frontend Github - https://github.com/naren4488/task-management-app-frontend
-- Backend Github - https://github.com/naren4488/task-management-app-backend
+- **Frontend GitHub:** [Frontend Repository](https://github.com/naren4488/task-management-app-frontend)
+- **Backend GitHub:** [Backend Repository](https://github.com/naren4488/task-management-app-backend)
 
-# Technologies & Data
+### Technologies & Data
 
-React + Vite + TS - for frontend
-Node + Express + MongoDB - for backend
-Tailwind + Shadcn/UI - for styling the application
+- **Frontend:** React + Vite + TypeScript
+- **Backend:** Node.js + Express + MongoDB
+- **Styling:** Tailwind CSS + Shadcn/UI
 
 # Setup Guide - Frontend
 
 To setup & run the frontend in local, clone the git repository : https://github.com/naren4488/task-management-app-frontend
 
-- This app is create using vite-react, you can start the installation of project packages by command :
+- This app is created using vite-react, you can start the installation of project packages by command :
   $ npm install
 
 - then run the project using command :
@@ -32,7 +32,7 @@ To setup & run the frontend in local, clone the git repository : https://github.
 - to preview after build :
   $ npm run preview
 
-# Folder strucutre - Frontend
+# Folder structure - Frontend
 
 - package.json - contains all the details about scripts, dependencies & devDependencies
 - public - contains assets of application (brandLogo & landing page images)
@@ -62,13 +62,13 @@ To setup & run the frontend in local, clone the git repository : https://github.
 
 To setup & run the backend in local, clone the git repository : https://github.com/naren4488/task-management-app-backend
 
-- This app is create using vite-react, you can start the installation of project packages by command :
+- This app is create using node & express, you can start the installation of project packages by command :
   $ npm install
 
 - then run the project using command :
   $ npm run dev
 
-# Folder strucutre - Frontend
+# Folder structure - Frontend
 
 - package.json - contains all the details about scripts, dependencies & devDependencies
 - src/routes - contains all the routes for backend(user & tasks)
