@@ -18,6 +18,7 @@ interface Props {
     taskStatus: string
   ) => void;
   deleteTask: (taskId: string) => void;
+  taskCount: number;
 }
 
 const TaskColumn = ({
@@ -26,10 +27,9 @@ const TaskColumn = ({
   addNewTask,
   editTask,
   deleteTask,
+  taskCount,
 }: Props) => {
   const [currentColumnTasks, setCurrnetColumnTasks] = useState<TypeTask[]>([]);
-
-  // console.log("tasks reached in task col", tasks);
 
   const tasksId = useMemo(() => {
     return tasks.map((task) => task._id);
@@ -55,13 +55,7 @@ const TaskColumn = ({
     transform: CSS.Transform.toString(transform),
   };
 
-  // const getCurrentColumnTasks = (tasks: TypeTask[], column: TypeColumn) => {
-  //   const filteredTasks = tasks.filter((task) => task.status === column.title);
-  //   setCurrnetColumnTasks(filteredTasks);
-  // };
-
   useEffect(() => {
-    // getCurrentColumnTasks(tasks, column);
     setCurrnetColumnTasks(tasks);
   }, [column, tasks]);
 
@@ -110,7 +104,7 @@ const TaskColumn = ({
         </DialogTrigger>
         <NewTaskModal
           addNewTask={addNewTask}
-          tasksCount={tasks.length}
+          tasksCount={taskCount}
           status={column.title}
         />
       </Dialog>

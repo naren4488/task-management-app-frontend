@@ -1,8 +1,8 @@
 {
   "columns": [
-    { "id": 2938741, "title": "To Do" },
-    { "id": 8726342, "title": "In Progress" },
-    { "id": 3049853, "title": "Done" }
+    { "id": "2938741", "title": "To Do" },
+    { "id": "8726342", "title": "In Progress" },
+    { "id": "3049853", "title": "Done" }
   ],
   "tasks": [
     {

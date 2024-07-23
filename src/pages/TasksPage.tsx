@@ -9,6 +9,7 @@ import {
   DragOverlay,
   DragStartEvent,
   PointerSensor,
+  UniqueIdentifier,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -45,7 +46,9 @@ const TasksPage = () => {
         } else if (res.status !== 200) {
           toast.warning("Something went wrong, Please check the logs");
         }
-        setTasks(data.tasks);
+        if (data.tasks) {
+          setTasks(data.tasks);
+        }
       } catch (err) {
         console.log(err);
       } finally {
@@ -98,7 +101,7 @@ const TasksPage = () => {
   };
 
   const editTaskAPI = async (updatedTask: {
-    id: string;
+    id: string | UniqueIdentifier;
     title: string;
     description: string;
     status: string;
@@ -121,7 +124,7 @@ const TasksPage = () => {
         });
         const data = await res.json();
         if (res.status === 200) {
-          toast.success("Task updated");
+          // toast.success("Task updated");
           return data.task;
         } else {
           toast.warning("Something went wrong, Please check the logs");
@@ -182,8 +185,11 @@ const TasksPage = () => {
       description: taskDesc,
       status: taskStatus,
     };
-    await createTaskAPI(newTask);
-    await getTasksAPI();
+    const resTask = await createTaskAPI(newTask);
+    if (resTask) {
+      setTasks([...tasks, resTask]);
+    }
+    // await getTasksAPI();
   };
 
   const editTask = async (
@@ -224,68 +230,85 @@ const TasksPage = () => {
     setActiveTask(null);
 
     const { active, over } = event;
-    console.log("drag end running");
-    console.log("active", active);
-    console.log("over", over);
 
     if (!over) return;
 
-    const activeColumnId = active.id;
-    const overColumnId = over.id;
+    const activeId = active.id;
+    const overId = over.id;
 
-    if (activeColumnId === overColumnId) return;
+    if (activeId === overId) return;
 
     const isActiveATask = active.data.current?.type === "Task";
+    // const isOverATask = over.data.current?.type === "Task";
+    const isActiveAColumn = active.data.current?.type === "Column";
     const isOverAColumn = over.data.current?.type === "Column";
 
-    if (isActiveATask && isOverAColumn) return;
+    // if (isActiveATask && isOverAColumn) return;
 
-    setColumns((columns) => {
-      const activeColumnIndex = columns.findIndex(
-        (col) => col.id === activeColumnId
-      );
-      const overColumnIndex = columns.findIndex(
-        (col) => col.id === overColumnId
-      );
+    if (isActiveATask && isOverAColumn) {
+      const updateTask = {
+        id: activeId,
+        title: active.data.current?.task.title,
+        description: active.data.current?.task.description,
+        status: over.data.current?.column.title,
+      };
+      editTaskAPI(updateTask);
+    }
 
-      return arrayMove(columns, activeColumnIndex, overColumnIndex);
-    });
+    if (isActiveAColumn && isOverAColumn) {
+      setColumns((columns) => {
+        const activeColumnIndex = columns.findIndex(
+          (col) => col.id === activeId
+        );
+        const overColumnIndex = columns.findIndex((col) => col.id === overId);
+
+        return arrayMove(columns, activeColumnIndex, overColumnIndex);
+      });
+    }
   };
 
   const onDragOver = (event: DragOverEvent) => {
     const { active, over } = event;
-    console.log("drag over running");
-    console.log("active", active);
-    console.log("over", over);
 
     if (!over) return;
 
     const activeTaskId = active.id;
     const overTaskId = over.id;
 
+    // dragging over itself
     if (activeTaskId === overTaskId) return;
 
     const isActiveATask = active.data.current?.type === "Task";
     const isOverATask = over.data.current?.type === "Task";
+    const isActiveAColumn = active.data.current?.type === "Column";
+    const isOverAColumn = over.data.current?.type === "Column";
+
+    // handle case of col over col
+    if (isActiveAColumn && isOverAColumn) return;
 
     // handle case of not dragging a task
     if (!isActiveATask) return;
 
     // dropping a task over another task
     if (isActiveATask && isOverATask) {
+      const updateTask = {
+        id: activeTaskId,
+        title: active.data.current?.task.title,
+        description: active.data.current?.task.description,
+        status: over.data.current?.task.status,
+      };
+      editTaskAPI(updateTask);
       setTasks((tasks) => {
         const activeIndex = tasks.findIndex(
           (task) => task._id === activeTaskId
         );
         const overIndex = tasks.findIndex((task) => task._id === overTaskId);
-
         tasks[activeIndex].status = tasks[overIndex].status;
 
         return arrayMove(tasks, activeIndex, overIndex);
       });
     }
 
-    const isOverAColumn = over.data.current?.type === "Column";
     // dropping a task over a column
     if (isActiveATask && isOverAColumn) {
       setTasks((tasks) => {
@@ -308,10 +331,6 @@ const TasksPage = () => {
     })
   );
 
-  // console.log("tasks", tasks);
-  // console.log("active task", activeTask);
-  // console.log("active col", activeColumn);
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -333,6 +352,7 @@ const TasksPage = () => {
               editTask={editTask}
               deleteTask={deleteTask}
               addNewTask={addNewTask}
+              taskCount={tasks.length}
             />
           ))}
         </SortableContext>
@@ -347,6 +367,7 @@ const TasksPage = () => {
               editTask={editTask}
               deleteTask={deleteTask}
               addNewTask={addNewTask}
+              taskCount={tasks.length}
             />
           )}
           {activeTask && (

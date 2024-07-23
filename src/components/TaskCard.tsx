@@ -18,7 +18,6 @@ interface Props {
   deleteTask: (taskId: string) => void;
 }
 const TaskCard = ({ task, editTask, deleteTask }: Props) => {
-  // console.log("finally at ", task);
   const {
     setNodeRef,
     attributes,

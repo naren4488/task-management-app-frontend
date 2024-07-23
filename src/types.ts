@@ -1,5 +1,5 @@
 export type TypeColumn = {
-  id: number;
+  id: string;
   title: string;
 };
 

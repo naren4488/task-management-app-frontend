@@ -60,7 +60,7 @@ const LoginPage = () => {
           navigate("/tasks");
         } else {
           toast.warning("Something went wrong, Please check the logs");
-          console.log(data);
+          console.log(res);
         }
       } catch (error) {
         alert(error);
