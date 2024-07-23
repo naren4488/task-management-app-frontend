@@ -3,15 +3,12 @@ export type TypeColumn = {
   title: string;
 };
 
-// export type Id = {
-//   id: number;
-// };
-
 export type TypeTask = {
-  id: number;
+  _id: string;
   title: string;
   description: string;
   status: string;
-  //   createdAt: Date;
-  //   updatedAt: Date | undefined;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
 };

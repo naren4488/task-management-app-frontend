@@ -29,7 +29,7 @@ const TasksPage = () => {
     return columns.map((col) => col.id);
   }, [columns]);
 
-  const getTasks = async () => {
+  const getTasksAPI = async () => {
     const token = localStorage.getItem("accessToken");
     if (token) {
       setIsLoading(true);
@@ -45,19 +45,62 @@ const TasksPage = () => {
         } else if (res.status !== 200) {
           toast.info("Something went wrong, Please check the logs");
         }
-        console.log("tasks", data.tasks);
         setTasks(tasks);
       } catch (err) {
         console.log(err);
       } finally {
         setIsLoading(false);
       }
+    } else {
+      console.log("access token does not exist, please login ");
     }
+  };
+
+  const createTaskAPI = async (newTask: {
+    title: string;
+    description: string;
+    status: string;
+  }): Promise<TypeTask | null> => {
+    const token = localStorage.getItem("accessToken");
+    console.log("create api call", newTask);
+    if (token) {
+      // setIsLoading(true);
+      try {
+        const res = await fetch(`${backendEndpoint}/task`, {
+          method: "POST",
+          body: JSON.stringify({
+            title: newTask.title,
+            description: newTask.description,
+            status: newTask.status,
+          }),
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+        if (res.status === 200) {
+          toast.success("Task created");
+          return data.newTask;
+        } else {
+          toast.info("Something went wrong, Please check the logs");
+          return null;
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        // setIsLoading(false);
+      }
+    } else {
+      console.log("access token does not exist, please login ");
+      return null;
+    }
+    return null;
   };
 
   useEffect(() => {
     setColumns(testingData.columns);
-    getTasks();
+    getTasksAPI();
     // setTasks(testingData.tasks);
   }, []);
 
@@ -66,13 +109,20 @@ const TasksPage = () => {
     taskDesc: string,
     taskStatus: string
   ) => {
-    const newTask: TypeTask = {
-      id: Math.floor(Math.random() * 309834),
+    const newTask = {
+      // id: Math.floor(Math.random() * 309834),
       title: taskTitle,
       description: taskDesc,
       status: taskStatus,
     };
-    setTasks([...tasks, newTask]);
+    const task = createTaskAPI(newTask);
+    if (task) {
+      task.then((task) => {
+        if (task) {
+          setTasks([...tasks, task]);
+        }
+      });
+    }
   };
 
   const editTask = (
@@ -195,6 +245,10 @@ const TasksPage = () => {
     })
   );
 
+  console.log("tasks", tasks);
+  console.log("active task", activeTask);
+  console.log("active col", activeColumn);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -234,7 +288,7 @@ const TasksPage = () => {
           )}
           {activeTask && (
             <TaskCard
-              key={activeTask.id}
+              key={activeTask._id}
               task={activeTask}
               editTask={editTask}
               deleteTask={deleteTask}

@@ -1,11 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BrandLogo from "/TMA-Logo.png";
 import { Button } from "./ui/button";
 import { User } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Header = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, []);
+
   return (
     <div className="px-4 lg:px-12 shadow-md py-2 border-b border-b-amber-300">
       <div className="flex items-center justify-between">
@@ -18,7 +28,10 @@ const Header = () => {
             </div>
             <Link to={"/"}>
               <Button
-                onClick={() => setIsAuthenticated(false)}
+                onClick={() => {
+                  localStorage.removeItem("accessToken");
+                  setIsAuthenticated(false);
+                }}
                 className=" bg-red-600 hover:bg-red-700"
               >
                 Logout

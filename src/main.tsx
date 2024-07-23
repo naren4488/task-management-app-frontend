@@ -9,7 +9,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <AppRoutes />
-      <Toaster visibleToasts={1} position="top-right" richColors />
+      <Toaster visibleToasts={1} position="bottom-right" richColors />
     </BrowserRouter>
   </React.StrictMode>
 );

@@ -29,6 +29,8 @@ const TaskColumn = ({
 }: Props) => {
   const [currentColumnTasks, setCurrnetColumnTasks] = useState<TypeTask[]>([]);
 
+  console.log("tasks reached in task col", tasks);
+
   const tasksId = useMemo(() => {
     return tasks.map((task) => task.id);
   }, [tasks]);
@@ -90,7 +92,7 @@ const TaskColumn = ({
         <SortableContext items={tasksId}>
           {currentColumnTasks.map((task) => (
             <TaskCard
-              key={task.id}
+              key={task._id}
               task={task}
               editTask={editTask}
               deleteTask={deleteTask}
